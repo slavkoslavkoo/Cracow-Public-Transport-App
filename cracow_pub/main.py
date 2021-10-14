@@ -29,6 +29,64 @@ def search_again():
     else:
         return True
 
+def line_num():
+    while True:
+        num = input("Please enter line number: ")
+        if num.isalpha():
+            print("You should enter only digits!")
+            print("*******************************")
+        elif num not in list(week.keys()):
+            print("There's no such line. Maybe in future. But now...")
+            print("*******************************")
+        else:
+            if len(num)<=2:
+                print("*******************************")
+                print(f"Good! Your tram line is {num}.")
+                print("*******************************")
+                break
+            else:
+                print("*******************************")
+                print(f"Good! Your bus line is {num}.")
+                print("*******************************")
+                break
+    return num
+
+def dir_num():
+    print(f"Now you can choose between the directions.\nEither {list(week[ask_line])[0]} or {list(week[ask_line])[1]}.")
+    while True:
+        dir = input('Choose one: ').title()
+        if dir.isdigit():
+            print("*******************************")
+            print("Please enter direction's name. Not numer!")
+            print(f"It's '{list(week[ask_line])[0]}' or '{list(week[ask_line])[1]}'.")
+            print("*******************************")
+        elif dir not in week[ask_line]:
+            print("*******************************")
+            print('Wrong direction. Try again!')
+            print(f"It's '{list(week[ask_line])[0]}' or '{list(week[ask_line])[1]}'.")
+            print("*******************************")
+        else:
+            break
+    return dir
+
+def station_select():
+    print("*******************************")
+    print(f"Here's the list of stations on this line.\nChoose the one from list below:")
+    print("*******************************")
+    index = 1
+    for station in week[ask_line][ask_dir]:
+        print(index,station)
+        index += 1
+    while True:
+        print("*******************************")
+        line = input("So, where do we start? ==> ").title()
+        if line not in list(week[ask_line][ask_dir]):
+            print("*******************************")
+            print("There's no such station. Be careful and enter correct name!")
+        else:
+            break
+    return line
+
 # creating class to operate user's entries and timetables from Line.py
 class Ttable:
 
@@ -105,45 +163,15 @@ if __name__=='__main__':
     print("Welcome to the interactive timetable application for Cracow public transport!\nHope you enjoy it. Let's get started!")
     while True:        
         try:
-            ask_line = input('Enter your bus or tram line first: ')
-            if ask_line.isalpha():
-                print('Do not enter letters! Only numbers!')
-                continue
-            elif ask_line not in list(week):
-                print("There's no such bus or tram line in Cracow!")
-                continue
-
-            # determine if the line number is tram or bus
-            if len(ask_line)<=2:
-                print(f'Good! Your tram line is {ask_line}.')
-            else:
-                print(f"Good! Your bus line is {ask_line}.")
-            
-            # asks user to provide the direction of trip
-            print("*******************************")
-            print(f"Now you can choose from the directions you want to go.\nEither {list(week[ask_line])[0]} or {list(week[ask_line])[1]}.")
-            print("*******************************")
-            
-            ask_dir = input('Choose one: ').title()
-            print(f"You've chosen {ask_dir}'s direction")
-            
-            print("*******************************")
-            print(f"Here's the list of stations on this line.\nChoose the one from list below:")
-            # for loop to display all stations and numbers within the list
-            index = 1
-            for station in week[ask_line][ask_dir]:
-                print(index,station)
-                index += 1
-            print('*******************************')    
-            ask_station = input('From wich you wish to start: ').title()
-
+            ask_line = line_num()
+            ask_dir = dir_num()
+            ask_station = station_select()
             # asign entries to class object Ttable for further maintaining
             line = Ttable(ask_line, ask_dir, ask_station)
-
             # call function to show closest line trip
             line.closest()
                 
             if not search_again():
                 break
         except KeyError:
-            print(f"Error occured! Please pay attention and enter correct line number, direction and station!")
+            pass
