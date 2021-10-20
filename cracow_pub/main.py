@@ -74,6 +74,7 @@ def dir_num():
 # function to correctly choose station
 def station_select():
     print("*******************************")
+    print(f"You've chosen {ask_dir}'s direction. ")
     print(f"Here's the list of stations on this line.\nChoose the one from list below:")
     print("*******************************")
     index = 1
